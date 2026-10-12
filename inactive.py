@@ -17,7 +17,7 @@ from urllib.parse import unquote_plus
 from zoneinfo import ZoneInfo
 
 WORLD = os.environ.get("GREPO_WORLD", "hu117")
-MIN_HOURS = int(os.environ.get("MIN_INACTIVE_HOURS", "24"))
+MIN_HOURS = int(os.environ.get("MIN_INACTIVE_HOURS", "12"))
 BASE = f"https://{WORLD}.grepolis.com/data/"
 ROOT = Path(__file__).parent
 STATE = ROOT / "state.json"
