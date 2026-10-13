@@ -89,11 +89,17 @@ def main():
             # új játékos (vagy első futás): innentől figyeljük
             new_state[pid] = {"sig": sig, "changed": now.isoformat(),
                               "seen": now.isoformat(), "observed_change": False}
-        elif old["sig"] != sig:
-            new_state[pid] = {"sig": sig, "changed": now.isoformat(),
-                              "seen": old["seen"], "observed_change": True}
         else:
-            new_state[pid] = old
+            o = old["sig"]
+            # Csak a játékos saját tevékenysége számít aktivitásnak:
+            # nőtt a pontja, a városszáma vagy a támadó pontja.
+            # A védő pont és a veszteségek (elfoglalt város) passzívak.
+            active = sig[0] > o[0] or sig[1] > o[1] or sig[2] > o[2]
+            if active:
+                new_state[pid] = {"sig": sig, "changed": now.isoformat(),
+                                  "seen": old["seen"], "observed_change": True}
+            else:
+                new_state[pid] = {**old, "sig": sig}
     STATE.write_text(json.dumps(new_state))
 
     rows = []
